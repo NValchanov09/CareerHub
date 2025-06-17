@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using CareerHub.Models;
 
 namespace CareerHub.Data
 {
@@ -9,5 +10,6 @@ namespace CareerHub.Data
             : base(options)
         {
         }
+        public DbSet<CareerHub.Models.Language> Language { get; set; } = default!;
     }
 }
