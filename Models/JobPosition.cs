@@ -46,6 +46,6 @@ namespace CareerHub.Models
         [ForeignKey("CompanyId")]
         public Company? Company { get; set; }
 
-        public DateTime PostedAt { get; set; } = DateTime.Now;
+        public DateTime? PostedAt { get; set; } = DateTime.Now;
     }
 }

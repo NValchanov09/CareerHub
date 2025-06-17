@@ -9,13 +9,15 @@ namespace CareerHub.Models
     {
         public string? Description { get; set; }
 
+        public string? ProfilePicturePath { get; set; }
+
         public string? LinkedInURL { get; set; }
 
         public string? GitHubURL { get; set; }
 
         public string? ContactEmail { get; set; }
 
-        public DateTime RegisteredAt { get; set; } = DateTime.Now;
+        public DateTime? RegisteredAt { get; set; } = DateTime.Now;
 
         public int? CompanyId { get; set; }
 

@@ -20,7 +20,7 @@ namespace CareerHub.Models
 
         public string? CoverLetterPath { get; set; }
 
-        public DateTime SubmitedAt { get; set; } = DateTime.Now;
+        public DateTime? SubmitedAt { get; set; } = DateTime.Now;
 
         public JobApplicationStatus? Status { get; set; }
     }
