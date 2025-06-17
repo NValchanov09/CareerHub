@@ -25,9 +25,5 @@ namespace CareerHub.Models
         public string? City { get; set; }
 
         public DateTime CreatedAt { get; set; }
-
-        public ICollection<ApplicationUser> Recruiters { get; set; } = new List<ApplicationUser>();
-
-        public ICollection<JobPosition> JobPositions { get; set; } = new List<JobPosition>();
     }
 }

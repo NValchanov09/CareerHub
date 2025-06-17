@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
@@ -16,9 +17,9 @@ namespace CareerHub.Models
 
         public DateTime RegisteredAt { get; set; } = DateTime.Now;
 
-        [ForeignKey("Company")]
         public int? CompanyId { get; set; }
 
+        [ForeignKey("CompanyId")]
         public Company? Company { get; set; }
     }
 }

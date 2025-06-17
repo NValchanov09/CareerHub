@@ -10,7 +10,5 @@ namespace CareerHub.Models
         public string Name { get; set; }
 
         public string? LogoPath { get; set; }
-
-        public ICollection<JobPosition> JobPositions { get; set; } = new List<JobPosition>();
     }
 }

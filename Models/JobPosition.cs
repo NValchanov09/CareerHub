@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Design.Internal;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
 namespace CareerHub.Models
@@ -34,6 +35,16 @@ namespace CareerHub.Models
         public decimal? SalaryTo { get; set; }
 
         public ICollection<Language> RequiredLanguages { get; set; } = new List<Language>();
+
+        public string? RecruiterId { get; set; }
+
+        [ForeignKey("RecruiterId")]
+        public ApplicationUser? Recruiter { get; set; }
+        
+        public int? CompanyId { get; set; }
+
+        [ForeignKey("CompanyId")]
+        public Company? Company { get; set; }
 
         public DateTime PostedAt { get; set; } = DateTime.Now;
     }
