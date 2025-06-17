@@ -4,6 +4,7 @@ using CareerHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareerHub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250617163208_UpdateModels3")]
+    partial class UpdateModels3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,41 +149,6 @@ namespace CareerHub.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Company");
-                });
-
-            modelBuilder.Entity("CareerHub.Models.JobApplication", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CVPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CandidateId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CoverLetterPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("JobPositionId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SubmitedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CandidateId");
-
-                    b.HasIndex("JobPositionId");
-
-                    b.ToTable("JobApplication");
                 });
 
             modelBuilder.Entity("CareerHub.Models.JobPosition", b =>
@@ -415,21 +383,6 @@ namespace CareerHub.Data.Migrations
                         .HasForeignKey("CompanyId");
 
                     b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("CareerHub.Models.JobApplication", b =>
-                {
-                    b.HasOne("CareerHub.Models.ApplicationUser", "Candidate")
-                        .WithMany()
-                        .HasForeignKey("CandidateId");
-
-                    b.HasOne("CareerHub.Models.JobPosition", "JobPosition")
-                        .WithMany()
-                        .HasForeignKey("JobPositionId");
-
-                    b.Navigation("Candidate");
-
-                    b.Navigation("JobPosition");
                 });
 
             modelBuilder.Entity("CareerHub.Models.JobPosition", b =>

@@ -6,7 +6,7 @@ namespace CareerHub.Models
     {
         public int Id { get; set; }
 
-        public int? CandidateId { get; set; }
+        public string? CandidateId { get; set; }
 
         [ForeignKey("CandidateId")]
         public ApplicationUser? Candidate { get; set; }
