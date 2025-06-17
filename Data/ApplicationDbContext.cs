@@ -12,5 +12,6 @@ namespace CareerHub.Data
         }
         public DbSet<CareerHub.Models.Language> Language { get; set; } = default!;
         public DbSet<CareerHub.Models.Company> Company { get; set; } = default!;
+        public DbSet<CareerHub.Models.JobPosition> JobPosition { get; set; } = default!;
     }
 }
