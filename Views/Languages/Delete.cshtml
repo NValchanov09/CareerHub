@@ -18,10 +18,13 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LogoPath)
+            Logo
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LogoPath)
+            @if (!string.IsNullOrEmpty(Model.LogoPath))
+            {
+                <img src="@Model.LogoPath" alt="@Model.Name Logo" width="100" />
+            }
         </dd>
     </dl>
     

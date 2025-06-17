@@ -7,15 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CareerHub.Data;
 using CareerHub.Models;
+using Microsoft.AspNetCore.Hosting;
 
 namespace CareerHub.Controllers
 {
     public class LanguagesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public LanguagesController(ApplicationDbContext context)
+        public LanguagesController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
+            _webHostEnvironment = webHostEnvironment;
             _context = context;
         }
 
@@ -54,15 +57,27 @@ namespace CareerHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,LogoPath")] Language language)
+        public async Task<IActionResult> Create(Language language, IFormFile logoFile)
         {
-            if (ModelState.IsValid)
+            if (logoFile != null && logoFile.Length > 0)
             {
-                _context.Add(language);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                Directory.CreateDirectory(uploadsFolder);
+
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(logoFile.FileName);
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await logoFile.CopyToAsync(stream);
+                }
+
+                language.LogoPath = "/images/" + uniqueFileName;
             }
-            return View(language);
+
+            _context.Add(language);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Languages/Edit/5
@@ -86,7 +101,7 @@ namespace CareerHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LogoPath")] Language language)
+        public async Task<IActionResult> Edit(int id, Language language, IFormFile logoFile)
         {
             if (id != language.Id)
             {
@@ -97,6 +112,22 @@ namespace CareerHub.Controllers
             {
                 try
                 {
+                    if (logoFile != null && logoFile.Length > 0)
+                    {
+                        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                        Directory.CreateDirectory(uploadsFolder);
+
+                        var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(logoFile.FileName);
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await logoFile.CopyToAsync(stream);
+                        }
+
+                        language.LogoPath = "/images/" + uniqueFileName;
+                    }
+
                     _context.Update(language);
                     await _context.SaveChangesAsync();
                 }
