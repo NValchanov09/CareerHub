@@ -2,10 +2,19 @@
 
 @{
     ViewData["Title"] = "Index";
+
+    Pager pager = new Pager();
+
+    int page = 1;
+
+    if(ViewBag.Pager != null)
+    {
+        pager = ViewBag.pager;
+        page = pager.CurrentPage;
+    }
 }
 
 <head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="~/css/crud_table.css" rel="stylesheet" asp-append-version="true">
 </head>
@@ -37,11 +46,11 @@
                     {
                         <tr class="link-row" data-href="@Url.Action("Details", "Languages", new { id = item.Id })">
                                 <td>
-                                    <strong>@Html.DisplayFor(modelItem => item.Id)</strong>
+                                    <div style="font-weight: 1000">@Html.DisplayFor(modelItem => item.Id)</div>
                                 </td>
 
                                 <td>
-                                    <div>@Html.DisplayFor(modelItem => item.Name)</div>
+                                    <div style="font-weight: 500;">@Html.DisplayFor(modelItem => item.Name)</div>
                                 </td>
                                 <td>
                                     @if (!string.IsNullOrEmpty(item.LogoPath))
@@ -70,21 +79,52 @@
         <!-- Pagination -->
         <div class="d-flex justify-content-between align-items-center p-3">
             <div class="text-muted">
-                Showing 1 to 1 of 1 entries
+                Showing <strong>@(pager.StartItemsShowing)</strong> to <strong>@(pager.EndItemsShowing)</strong> out of <strong>@(pager.TotalItems)</strong> languages
             </div>
-            <nav>
-                <ul class="pagination pagination-modern mb-0">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">Previous</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
+            @if(pager.TotalPages > 0)
+            {
+                    <ul class="pagination pagination-modern mb-0">
+
+                        @if (pager.CurrentPage > pager.StartPage)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Index" asp-route-page="1">
+                                    First
+                                </a>
+                            </li>
+
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Index" asp-route-page="@pager.CurrentPage - 1">
+                                    Previous
+                                </a>
+                            </li>
+                        }
+
+                        @for(int pg = pager.StartPage; pg <= pager.EndPage; pg++)
+                        {
+                            <li class="page-item @(pg == pager.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@pg">
+                                    @pg
+                                </a>
+                            </li>
+                        }
+
+                        @if(pager.CurrentPage < pager.EndPage)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Index" asp-route-page="@(pager.CurrentPage + 1)">
+                                    Next
+                                </a>
+                            </li>
+
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Index" asp-route-page="@pager.TotalPages">
+                                    Last
+                                </a>
+                            </li>
+                        }
                 </ul>
-            </nav>
+            }    
         </div>
     </div>
 </div>
