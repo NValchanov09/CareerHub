@@ -17,5 +17,24 @@ html {
 body {
     margin-bottom: 60px;
     background-color: #f8f9fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Outfit", sans-serif;
+    font-style: normal;
+    font-weight: 0;
+}
+
+.navbar-image {
+    height: 160px; 
+    margin-top: -55px; 
+    margin-bottom: -55px;
+    margin-left: 10px;
+}
+
+.nav-link {
+    font-size: 1.4rem;
+    color: #525252 !important;
+}
+
+.nav-item {
+    margin-left: 2rem;
+    color: green;
 }
