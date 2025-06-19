@@ -23,9 +23,30 @@ namespace CareerHub.Controllers
         }
 
         // GET: Languages
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int page = 1)
         {
-            return View(await _context.Language.ToListAsync());
+            List<Language> languages = _context.Language.ToList();
+
+            const int pageSize = 12;
+
+            if(page < 1)
+                page = 1;
+
+            int cnt = languages.Count();
+
+            int skip = (page - 1) * pageSize;
+
+            int startItemsShowing = skip + 1;
+
+            int endItemsShowing = startItemsShowing + pageSize - 1;
+
+            Pager pager = new Pager(cnt, page, pageSize, startItemsShowing, endItemsShowing);
+
+            var data = languages.Skip(skip).Take(pager.PageSize).ToList();
+
+            this.ViewBag.Pager = pager;
+
+            return View(data);
         }
 
         // GET: Languages/Details/5
