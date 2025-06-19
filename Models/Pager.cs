@@ -1,4 +1,7 @@
-﻿namespace CareerHub.Models
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Diagnostics;
+
+namespace CareerHub.Models
 {
     public class Pager
     {
@@ -19,29 +22,16 @@
 
         public int EndItemsShowing { get; set; }
 
+        public List<SelectListItem> PageSizeOptions { get; set; } = new List<SelectListItem>();
+
         public Pager() { }
 
-        public Pager(int totalItems, int currentPage, int pageSize, int startItemsShowing, int endItemsShowing)
+        public Pager(int totalItems, int currentPage, int pageSize, int startItemsShowing, int endItemsShowing, List<SelectListItem> pageSizeOptions)
         {
             int totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);
 
-            int startPage = currentPage - ShowPages / 2;
-            int endPage = currentPage + ShowPages - 1;  
-
-            if(startPage < 1)
-            {
-                endPage = endPage - startPage + 1;
-                startPage = 1;
-            }
-
-            if(endPage > totalPages)
-            {
-                endPage = totalPages;
-                if(endPage > ShowPages)
-                {
-                    startPage = endPage - startPage + 1;
-                }
-            }
+            int startPage = Math.Max(1, currentPage - ShowPages / 2);
+            int endPage = Math.Min(totalPages, currentPage + ShowPages - 1);
 
             TotalItems = totalItems;
             CurrentPage = currentPage;
@@ -51,6 +41,7 @@
             EndPage = endPage;
             StartItemsShowing = Math.Min(startItemsShowing, TotalItems);
             EndItemsShowing = Math.Min(endItemsShowing, TotalItems);
+            PageSizeOptions = pageSizeOptions;
         }
     }
 }

@@ -23,16 +23,37 @@ namespace CareerHub.Controllers
         }
 
         // GET: Languages
-        public IActionResult Index(int page = 1)
+        public IActionResult Index(int page = 1, int pageSize = 10)
         {
             List<Language> languages = _context.Language.ToList();
 
-            const int pageSize = 12;
+            List<int> pageSizes = new List<int>{ 5, 10, 15, 25, 50, 100 };
 
-            if(page < 1)
+            int itemCount = languages.Count();
+
+            var pageSizeOptions = new List<SelectListItem>();
+
+            foreach (int size in pageSizes)
+            {
+                if (size < itemCount)
+                {
+                    pageSizeOptions.Add(new SelectListItem { Value = $"{size}", Text = $"{size}", Selected = pageSize == size });
+                }
+            }
+
+            pageSizeOptions.Add(new SelectListItem { Value = $"{itemCount}", Text = $"All({itemCount})", Selected = pageSize == itemCount });
+
+            if (page < 1 || page > itemCount)
                 page = 1;
 
-            int cnt = languages.Count();
+            if (pageSize < 1)
+                pageSize = 10;
+
+            if(pageSize > itemCount && itemCount > 0)
+                pageSize = itemCount;
+
+            if ((page - 1) * pageSize > itemCount)
+                page = 1;
 
             int skip = (page - 1) * pageSize;
 
@@ -40,7 +61,7 @@ namespace CareerHub.Controllers
 
             int endItemsShowing = startItemsShowing + pageSize - 1;
 
-            Pager pager = new Pager(cnt, page, pageSize, startItemsShowing, endItemsShowing);
+            Pager pager = new Pager(itemCount, page, pageSize, startItemsShowing, endItemsShowing, pageSizeOptions);
 
             var data = languages.Skip(skip).Take(pager.PageSize).ToList();
 
