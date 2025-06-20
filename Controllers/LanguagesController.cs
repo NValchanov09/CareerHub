@@ -236,6 +236,33 @@ namespace CareerHub.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteSelected([FromBody] int[] languageIds)
+        {
+            if (languageIds == null)
+            {
+                return Json(new { success = false, message = "languageIds is null." });
+            }
+            if (languageIds.Length == 0)
+            {
+                return Json(new { success = false, message = "No languages selected for deletion." });
+            }
+
+            try
+            {
+                var companiesToDelete = _context.Language.Where(c => languageIds.Contains(c.Id)).ToList();
+                _context.Language.RemoveRange(companiesToDelete);
+                _context.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error deleting languages: " + ex.Message });
+            }
+        }
+
         private bool LanguageExists(int id)
         {
             return _context.Language.Any(e => e.Id == id);

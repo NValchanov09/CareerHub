@@ -19,74 +19,119 @@
     <link href="~/css/crud_table.css" rel="stylesheet" asp-append-version="true">
 </head>
 
-<div class="container mt-4">
-    <div class="table-container">
+<body>
+    <div class="container mt-4">
 
-        <!-- Header -->
-        <div class="table-header d-flex justify-content-between align-items-center">
-            <h2>Languages Management</h2>
-            <a asp-action="Create" class="btn btn-primary-custom">
-                <i class="fas fa-plus me-2"></i>Add New Language
-            </a>
+        <!-- Deletion Confirm Modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="confirmModalLabel">Confirm Deletion</h4>
+                        <button type="button" class="close cancelDelete" aria-label="Close">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete the selected languages?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                        <button type="button" class="btn btn-secondary cancelDelete" id="cancelDelete">Cancel</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Table -->
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead>
-                    <tr>
-                        <th>
-                            <a asp-action="Index" 
-                            asp-route-page="@pager.CurrentPage" 
-                            asp-route-pageSize="@pager.PageSize" 
-                            asp-route-sortBy="id" 
-                            asp-route-isDescending="@(pager.SortingParameter == "id" ? !pager.IsDescending : false)">
-                            Id</a>
+        <div class="table-container">
 
-                            <i class="fa @(pager.SortingParameter != "id" ? "invisible" : "") @(pager.IsDescending ? "fa-caret-down" : "fa-caret-up")" aria-hidden="true"></i>
+            <!-- Header -->
+            <div class="table-header d-flex justify-content-between align-items-center">
+                <h2>Languages Management</h2>
 
-                        </th>
-                        <th>
-                            <a asp-action="Index" 
-                            asp-route-page="@pager.CurrentPage" 
-                            asp-route-pageSize="@pager.PageSize" 
-                            asp-route-sortBy="name"
-                            asp-route-isDescending="@(pager.SortingParameter == "name" ? !pager.IsDescending : false)">
-                            Name</a>
+                <a id="deleteSelected" class="btn btn-danger-custom">
+                    <i class="fa-solid fa-xmark me-2"></i>
+                    Delete Selected
+                </a>
 
-                            <i class="fa @(pager.SortingParameter != "name" ? "invisible" : "") @(pager.IsDescending ? "fa-caret-down" : "fa-caret-up")" aria-hidden="true"></i>
+                <a asp-action="Create" class="btn btn-primary-custom">
+                    <i class="fas fa-plus me-2"></i>
+                    Add New
+                </a>
+            </div>
 
-                        </th>
-                        <th>Logo</th>
+            <!-- Table -->
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="custom-checkbox">
+                                    <input type="checkbox" id="selectAll" name="selectAll">
+                                    <label for="selectAll"></label>
+                                </span>
+                            </th>
+                            <th>
+                                <a asp-action="Index"
+                                   asp-route-page="@pager.CurrentPage"
+                                   asp-route-pageSize="@pager.PageSize"
+                                   asp-route-sortBy="id"
+                                   asp-route-isDescending="@(pager.SortingParameter == "id" ? !pager.IsDescending : false)">
+                                    Id
+                                </a>
 
-                        <th> 
-                            <div class="pageSizeOptions d-flex justify-content-end align-items-center gap-2">
-                                <label for="pageSizeSelector">
-                                    Items per page
-                                </label>
+                                <i class="fa @(pager.SortingParameter != "id" ? "invisible" : "") @(pager.IsDescending ? "fa-caret-down" : "fa-caret-up")" aria-hidden="true"></i>
 
-                                <form 
-                                asp-action="Index" 
-                                asp-route-page="1" 
-                                asp-route-sortBy="@pager.SortingParameter" 
-                                asp-route-isDescending="@pager.IsDescending">
-                                    <select name="pageSize" id="pageSizeSelector" class="form-control form-select-sm text-end" style="width: auto;" onchange="this.form.submit()">
+                            </th>
+                            <th>
+                                <a asp-action="Index"
+                                   asp-route-page="@pager.CurrentPage"
+                                   asp-route-pageSize="@pager.PageSize"
+                                   asp-route-sortBy="name"
+                                   asp-route-isDescending="@(pager.SortingParameter == "name" ? !pager.IsDescending : false)">
+                                    Name
+                                </a>
 
-                                        @foreach (var item in pager.PageSizeOptions)
-                                        {
-                                            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
-                                        }
+                                <i class="fa @(pager.SortingParameter != "name" ? "invisible" : "") @(pager.IsDescending ? "fa-caret-down" : "fa-caret-up")" aria-hidden="true"></i>
 
-                                    </select>
-                                </form>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr class="link-row" data-href="@Url.Action("Details", "Languages", new { id = item.Id })">
+                            </th>
+                            <th>Logo</th>
+
+                            <th>
+                                <div class="pageSizeOptions d-flex justify-content-end align-items-center gap-2">
+                                    <label for="pageSizeSelector">
+                                        Items per page
+                                    </label>
+
+                                    <form asp-action="Index"
+                                          asp-route-page="1"
+                                          asp-route-sortBy="@pager.SortingParameter"
+                                          asp-route-isDescending="@pager.IsDescending">
+                                        <select name="pageSize" id="pageSizeSelector" class="form-control form-select-sm text-end" style="width: auto;" onchange="this.form.submit()">
+
+                                            @foreach (var item in pager.PageSizeOptions)
+                                            {
+                                                <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                            }
+
+                                        </select>
+                                    </form>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="link-row" data-href="@Url.Action("Details", "Languages", new { id = item.Id })">
+
+                                <td>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="checkbox-@item.Id" name="checkbox" value="@item.Id">
+                                        <label for="checkbox-@item.Id"></label>
+                                    </span>
+                                </td>
+
                                 <td>
                                     <div style="font-weight: 1000">@Html.DisplayFor(modelItem => item.Id)</div>
                                 </td>
@@ -112,101 +157,161 @@
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        <div class="d-flex justify-content-between align-items-center p-3">
-            <div class="text-muted">
-                Showing items <strong>@(pager.StartItemsShowing)</strong> to <strong>@(pager.EndItemsShowing)</strong> out of <strong>@(pager.TotalItems)</strong> items
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-            @if(pager.TotalPages > 0)
-            {
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-between align-items-center p-3">
+                <div class="text-muted">
+                    Showing items <strong>@(pager.StartItemsShowing)</strong> to <strong>@(pager.EndItemsShowing)</strong> out of <strong>@(pager.TotalItems)</strong> items
+                </div>
+                @if (pager.TotalPages > 0)
+                {
                     <ul class="pagination pagination-modern mb-0">
 
                         @if (pager.CurrentPage > pager.StartPage)
                         {
                             <li class="page-item">
-                                <a class="page-link" 
-                                asp-action="Index" 
-                                asp-route-page="1" 
-                                asp-route-pageSize="@pager.PageSize" 
-                                asp-route-sortBy="@pager.SortingParameter" 
-                                asp-route-isDescending="@pager.IsDescending">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="1"
+                                   asp-route-pageSize="@pager.PageSize"
+                                   asp-route-sortBy="@pager.SortingParameter"
+                                   asp-route-isDescending="@pager.IsDescending">
                                     First
                                 </a>
                             </li>
 
                             <li class="page-item">
-                                <a class="page-link" 
-                                asp-action="Index" 
-                                asp-route-page="@pager.CurrentPage - 1" 
-                                asp-route-pageSize="@pager.PageSize"
-                                asp-route-sortBy="@pager.SortingParameter"
-                                asp-route-isDescending="@pager.IsDescending">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@pager.CurrentPage - 1"
+                                   asp-route-pageSize="@pager.PageSize"
+                                   asp-route-sortBy="@pager.SortingParameter"
+                                   asp-route-isDescending="@pager.IsDescending">
                                     Previous
                                 </a>
                             </li>
                         }
 
-                        @for(int pg = pager.StartPage; pg <= pager.EndPage; pg++)
+                        @for (int pg = pager.StartPage; pg <= pager.EndPage; pg++)
                         {
                             <li class="page-item @(pg == pager.CurrentPage ? "active" : "")">
-                                <a class="page-link" 
-                                asp-action="Index" 
-                                asp-route-page="@pg" 
-                                asp-route-pageSize="@pager.PageSize"
-                                asp-route-sortBy="@pager.SortingParameter"
-                                asp-route-isDescending="@pager.IsDescending">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@pg"
+                                   asp-route-pageSize="@pager.PageSize"
+                                   asp-route-sortBy="@pager.SortingParameter"
+                                   asp-route-isDescending="@pager.IsDescending">
                                     @pg
                                 </a>
                             </li>
                         }
 
-                        @if(pager.CurrentPage < pager.EndPage)
+                        @if (pager.CurrentPage < pager.EndPage)
                         {
                             <li class="page-item">
-                                <a class="page-link" 
-                                asp-action="Index" 
-                                asp-route-page="@(pager.CurrentPage + 1)" 
-                                asp-route-pageSize="@pager.PageSize"
-                                asp-route-sortBy="@pager.SortingParameter"
-                                asp-route-isDescending="@pager.IsDescending">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@(pager.CurrentPage + 1)"
+                                   asp-route-pageSize="@pager.PageSize"
+                                   asp-route-sortBy="@pager.SortingParameter"
+                                   asp-route-isDescending="@pager.IsDescending">
                                     Next
                                 </a>
                             </li>
 
                             <li class="page-item">
-                                <a class="page-link" 
-                                asp-action="Index" 
-                                asp-route-page="@pager.TotalPages" 
-                                asp-route-pageSize="@pager.PageSize"
-                                asp-route-sortBy="@pager.SortingParameter"
-                                asp-route-isDescending="@pager.IsDescending">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@pager.TotalPages"
+                                   asp-route-pageSize="@pager.PageSize"
+                                   asp-route-sortBy="@pager.SortingParameter"
+                                   asp-route-isDescending="@pager.IsDescending">
                                     Last
                                 </a>
                             </li>
                         }
-                </ul>
-            }    
+                    </ul>
+                }
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const rows = document.querySelectorAll(".link-row");
-        rows.forEach(row => {
-            row.addEventListener("click", function () {
-                const href = this.getAttribute("data-href");
-                if (href) {
-                    window.location.href = href;
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="@Url.Content("~/js/crud_table.js")"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+            var checkbox = $('table tbody input[type="checkbox"]');
+            $("#selectAll").click(function () {
+                if (this.checked) {
+                    checkbox.each(function () {
+                        this.checked = true;
+                    });
+                } else {
+                    checkbox.each(function () {
+                        this.checked = false;
+                    });
                 }
             });
-            row.style.cursor = "pointer";
+            checkbox.click(function () {
+                if (!this.checked) {
+                    $("#selectAll").prop("checked", false);
+                }
+            });
+
+            $("#deleteSelected").click(function () {
+                var selectedItems = [];
+
+                $('table tbody input[name="checkbox"]:checked').each(function () {
+                    selectedItems.push($(this).val());
+                });
+
+                $('.cancelDelete').click(function () {
+                    $('#confirmModal').modal('hide');
+                });
+
+                $('#confirmModal').on('click', function (e) {
+                    if ($(e.target).hasClass('modal')) {
+                        $(this).modal('hide');
+                    }
+                });
+
+                if (selectedItems.length > 0) {
+                    $('#confirmModal').modal('show');
+
+                    $('#confirmDelete').click(function () {
+                        $.ajax({
+                            url: '@Url.Action("DeleteSelected", "Languages")',
+                            type: 'POST',
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify(selectedItems),
+                            headers: {
+                                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function (response) {
+                                if (response.success) {
+                                    window.location.reload();
+                                } else {
+                                    alert(response.message || "Error deleting languages.");
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                alert("An error occurred: " + error);
+                            }
+                        });
+
+                        $('#confirmModal').modal('hide');
+                    });
+                }
+            });
         });
-    });
-</script>
+
+    </script>
+</body>
