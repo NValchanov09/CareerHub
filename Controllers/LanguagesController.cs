@@ -57,17 +57,11 @@ namespace CareerHub.Controllers
             if (isDescending)
                 languages = languages.Reverse();
 
-            if (page < 1 || page > itemCount)
-                page = 1;
-
             if (pageSize < 1)
                 pageSize = 10;
 
-            if(pageSize > itemCount && itemCount > 0)
+            if(pageSize > itemCount)
                 pageSize = itemCount;
-
-            if ((page - 1) * pageSize > itemCount)
-                page = 1;
 
             int skip = (page - 1) * pageSize;
 

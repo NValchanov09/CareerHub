@@ -34,6 +34,12 @@ namespace CareerHub.Models
         {
             int totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);
 
+            if(currentPage > totalPages)
+                currentPage = totalPages;
+
+            if(currentPage < 1)
+                currentPage = 1;
+
             int startPage = Math.Max(1, currentPage - ShowPages / 2);
             int endPage = Math.Min(totalPages, currentPage + ShowPages - 1);
 

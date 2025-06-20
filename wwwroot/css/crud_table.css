@@ -195,19 +195,39 @@
 }
 .custom-checkbox input[type="checkbox"] {  
 	opacity: 0;
-	width: 30px;
-	height: 30px;
+	width: 35px;
+	height: 35px;
 	position: absolute;
 	z-index: 9;
 }
-.custom-checkbox label:before{
-	width: 30px;
-	height: 30px;
+
+.custom-checkbox input[type="checkbox"]:hover {
+     transform: translateY(-1px);
+     box-shadow: 0 2px 10px #545454;
 }
+.custom-checkbox {
+	position: relative;
+}
+
+.custom-checkbox input[type="checkbox"] {  
+	opacity: 0;
+	width: 35px;
+	height: 35px;
+	position: absolute;
+	z-index: 9;
+}
+
+.custom-checkbox input[type="checkbox"]:hover + label:before {
+	transform: translateY(-1px);
+	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+}
+
 .custom-checkbox label:before {
+	width: 35px;
+	height: 35px;
 	content: '';
-    margin-left: 0.5rem;
-    margin-right: -2vw;
+	margin-left: 0.5rem;
+	margin-right: -2vw;
 	display: inline-block;
 	vertical-align: text-top;
 	background: white;
@@ -215,29 +235,43 @@
 	border-radius: 2px;
 	box-sizing: border-box;
 	z-index: 2;
+	transition: all 0.2s ease-in-out;
 }
-.custom-checkbox input[type="checkbox"]:checked + label:after {
-	content: '';
-	position: absolute;
-	left: 18px;
-	top: 4px;
-	width: 10px;
-	height: 18px;
-	border: 2px solid black;
-	border-width: 0 3px 3px 0;
-	transform: inherit;
-	z-index: 3;
-	transform: rotateZ(45deg);
-}
+
 .custom-checkbox input[type="checkbox"]:checked + label:before {
-	border-color: #03A9F4;
-	background: #03A9F4;
+	border: none;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
-.custom-checkbox input[type="checkbox"]:checked + label:after {
-	border-color: #fff;
-}
+
 .custom-checkbox input[type="checkbox"]:disabled + label:before {
 	color: #b8b8b8;
 	box-shadow: none;
 	background: #ddd;
 }
+
+.custom-checkbox label:after {
+	content: '';
+	position: absolute;
+	left: 21px;
+	top: 6px;
+	width: 10px;
+	height: 20px;
+	border: 2px solid transparent;
+	border-width: 0 3px 3px 0;
+	transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+	transform: rotateZ(45deg);
+	opacity: 0;
+	z-index: 3;
+	box-shadow: none;
+	pointer-events: none;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + label:after {
+	border-color: #fff;
+	opacity: 1;
+}
+
+.custom-checkbox input[type="checkbox"]:checked:hover + label:after {
+    transform: translateY(-1px) rotateZ(45deg);
+}
+

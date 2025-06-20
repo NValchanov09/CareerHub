@@ -58,7 +58,7 @@
 
                     <a asp-action="Create" class="btn btn-primary-custom">
                         <i class="fas fa-plus"></i>
-                        <span class="d-none d-md-inline ms-2">New Item</span>
+                        <span class="d-none d-md-inline ms-2">Add Item</span>
                     </a>
                 </div>
                 
@@ -108,7 +108,8 @@
                                         Items per page
                                     </label>
 
-                                    <form asp-action="Index"
+                                    <form method="get"
+                                          asp-action="Index"
                                           asp-route-page="1"
                                           asp-route-sortBy="@pager.SortingParameter"
                                           asp-route-isDescending="@pager.IsDescending">
@@ -125,6 +126,7 @@
                             </th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach (var item in Model)
                         {
