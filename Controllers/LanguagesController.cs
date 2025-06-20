@@ -41,7 +41,7 @@ namespace CareerHub.Controllers
                 }
             }
 
-            pageSizeOptions.Add(new SelectListItem { Value = $"{itemCount}", Text = $"All({itemCount})", Selected = pageSize == itemCount });
+            pageSizeOptions.Add(new SelectListItem { Value = $"{itemCount}", Text = $"All ({itemCount})", Selected = pageSize == itemCount });
 
             switch(sortBy)
             {
