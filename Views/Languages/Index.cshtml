@@ -47,17 +47,21 @@
 
             <!-- Header -->
             <div class="table-header d-flex justify-content-between align-items-center">
+
                 <h2>Languages Management</h2>
 
-                <a id="deleteSelected" class="btn btn-danger-custom">
-                    <i class="fa-solid fa-xmark me-2"></i>
-                    Delete Selected
-                </a>
+                <div class="d-flex">
+                    <a id="deleteSelected" data-delete-url="@Url.Action("DeleteSelected", "Languages")" class="btn btn-danger-custom me-4">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span class="d-none d-md-inline ms-2">Delete Selected</span>
+                    </a>
 
-                <a asp-action="Create" class="btn btn-primary-custom">
-                    <i class="fas fa-plus me-2"></i>
-                    Add New
-                </a>
+                    <a asp-action="Create" class="btn btn-primary-custom">
+                        <i class="fas fa-plus"></i>
+                        <span class="d-none d-md-inline ms-2">New Item</span>
+                    </a>
+                </div>
+                
             </div>
 
             <!-- Table -->
@@ -95,6 +99,7 @@
                                 <i class="fa @(pager.SortingParameter != "name" ? "invisible" : "") @(pager.IsDescending ? "fa-caret-down" : "fa-caret-up")" aria-hidden="true"></i>
 
                             </th>
+
                             <th>Logo</th>
 
                             <th>
@@ -147,15 +152,17 @@
                                 </td>
 
                                 <td class="text-end">
-                                    <a asp-action="Details" asp-route-id="@item.Id" Details class="btn btn-action btn-details" title="Details">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-action btn-edit" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-action btn-delete" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+                                    <div class="d-flex flex-column flex-sm-row align-items-center justify-content-end gap-2">
+                                        <a asp-action="Details" asp-route-id="@item.Id" Details class="btn btn-action btn-details" title="Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-action btn-edit" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-action btn-delete" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -243,75 +250,4 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="@Url.Content("~/js/crud_table.js")"></script>
-    <script>
-
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-
-            var checkbox = $('table tbody input[type="checkbox"]');
-            $("#selectAll").click(function () {
-                if (this.checked) {
-                    checkbox.each(function () {
-                        this.checked = true;
-                    });
-                } else {
-                    checkbox.each(function () {
-                        this.checked = false;
-                    });
-                }
-            });
-            checkbox.click(function () {
-                if (!this.checked) {
-                    $("#selectAll").prop("checked", false);
-                }
-            });
-
-            $("#deleteSelected").click(function () {
-                var selectedItems = [];
-
-                $('table tbody input[name="checkbox"]:checked').each(function () {
-                    selectedItems.push($(this).val());
-                });
-
-                $('.cancelDelete').click(function () {
-                    $('#confirmModal').modal('hide');
-                });
-
-                $('#confirmModal').on('click', function (e) {
-                    if ($(e.target).hasClass('modal')) {
-                        $(this).modal('hide');
-                    }
-                });
-
-                if (selectedItems.length > 0) {
-                    $('#confirmModal').modal('show');
-
-                    $('#confirmDelete').click(function () {
-                        $.ajax({
-                            url: '@Url.Action("DeleteSelected", "Languages")',
-                            type: 'POST',
-                            contentType: 'application/json; charset=utf-8',
-                            data: JSON.stringify(selectedItems),
-                            headers: {
-                                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-                            },
-                            success: function (response) {
-                                if (response.success) {
-                                    window.location.reload();
-                                } else {
-                                    alert(response.message || "Error deleting languages.");
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                alert("An error occurred: " + error);
-                            }
-                        });
-
-                        $('#confirmModal').modal('hide');
-                    });
-                }
-            });
-        });
-
-    </script>
 </body>

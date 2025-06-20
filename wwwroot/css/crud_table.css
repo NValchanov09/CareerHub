@@ -1,4 +1,4 @@
-﻿/*Table header*/
+﻿/* Table header */
 .table-container {
     background: white;
     border-radius: 12px;
@@ -60,7 +60,7 @@
     }
 
 
-/*Main Table*/
+/* Main Table */
 
 .table th {
     background-color: #ffffff;
@@ -94,11 +94,12 @@
         box-shadow: 0 2px 8px rgba(100, 100, 100, 0.3);
     } 
 
+/* Action Buttons (CRUD) */
+
 .btn-action {
     border: none;
     border-radius: 6px;
     padding: 0.4rem 1rem;
-    margin: 0 0.2rem;
     font-size: 1.3rem;
     font-weight: 500;
     transition: all 0.2s ease;
@@ -143,7 +144,7 @@
         text-shadow: white 1px 1px 10px;
     }
 
-/*Pagination*/
+/* Pagination */
 
 .pagination-modern {
     margin-top: 2rem;
@@ -169,7 +170,7 @@
         box-shadow: 0 2px 10px #667eea;
     }
 
-/*Page Size options*/
+/* Page Size options */
 
 .pageSizeOptions {
     border-radius: 5px;
