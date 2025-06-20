@@ -22,11 +22,15 @@ namespace CareerHub.Models
 
         public int EndItemsShowing { get; set; }
 
+        public string SortingParameter { get; set; }
+
+        public bool IsDescending { get; set; }
+
         public List<SelectListItem> PageSizeOptions { get; set; } = new List<SelectListItem>();
 
         public Pager() { }
 
-        public Pager(int totalItems, int currentPage, int pageSize, int startItemsShowing, int endItemsShowing, List<SelectListItem> pageSizeOptions)
+        public Pager(int totalItems, int currentPage, int pageSize, int startItemsShowing, int endItemsShowing, List<SelectListItem> pageSizeOptions, string sortBy, bool isDescending)
         {
             int totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);
 
@@ -42,6 +46,8 @@ namespace CareerHub.Models
             StartItemsShowing = Math.Min(startItemsShowing, TotalItems);
             EndItemsShowing = Math.Min(endItemsShowing, TotalItems);
             PageSizeOptions = pageSizeOptions;
+            SortingParameter = sortBy;
+            IsDescending = isDescending;
         }
     }
 }

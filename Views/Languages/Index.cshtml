@@ -35,16 +35,35 @@
             <table class="table table-hover mb-0">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
+                        <th>
+                            <a asp-action="Index" 
+                            asp-route-page="@pager.CurrentPage" 
+                            asp-route-pageSize="@pager.PageSize" 
+                            asp-route-sortBy="id" 
+                            asp-route-isDescending="@(pager.SortingParameter == "id" ? !pager.IsDescending : false)">
+                            Id</a>
+                        </th>
+                        <th>
+                            <a asp-action="Index" 
+                            asp-route-page="@pager.CurrentPage" 
+                            asp-route-pageSize="@pager.PageSize" 
+                            asp-route-sortBy="name"
+                            asp-route-isDescending="@(pager.SortingParameter == "name" ? !pager.IsDescending : false)">
+                            Name</a>
+                        </th>
                         <th>Logo</th>
+
                         <th> 
                             <div class="pageSizeOptions d-flex justify-content-end align-items-center gap-2">
                                 <label for="pageSizeSelector">
                                     Items per page
                                 </label>
 
-                                <form asp-action="Index" asp-route-page="1">
+                                <form 
+                                asp-action="Index" 
+                                asp-route-page="1" 
+                                asp-route-sortBy="@pager.SortingParameter" 
+                                asp-route-isDescending="@pager.IsDescending">
                                     <select name="pageSize" id="pageSizeSelector" class="form-control form-select-sm text-end" style="width: auto;" onchange="this.form.submit()">
 
                                         @foreach (var item in pager.PageSizeOptions)
@@ -105,13 +124,23 @@
                         @if (pager.CurrentPage > pager.StartPage)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-action="Index" asp-route-page="1" asp-route-pageSize="@pager.PageSize">
+                                <a class="page-link" 
+                                asp-action="Index" 
+                                asp-route-page="1" 
+                                asp-route-pageSize="@pager.PageSize" 
+                                asp-route-sortBy="@pager.SortingParameter" 
+                                asp-route-isDescending="@pager.IsDescending">
                                     First
                                 </a>
                             </li>
 
                             <li class="page-item">
-                                <a class="page-link" asp-action="Index" asp-route-page="@pager.CurrentPage - 1" asp-route-pageSize="@pager.PageSize">
+                                <a class="page-link" 
+                                asp-action="Index" 
+                                asp-route-page="@pager.CurrentPage - 1" 
+                                asp-route-pageSize="@pager.PageSize"
+                                asp-route-sortBy="@pager.SortingParameter"
+                                asp-route-isDescending="@pager.IsDescending">
                                     Previous
                                 </a>
                             </li>
@@ -120,7 +149,12 @@
                         @for(int pg = pager.StartPage; pg <= pager.EndPage; pg++)
                         {
                             <li class="page-item @(pg == pager.CurrentPage ? "active" : "")">
-                                <a class="page-link" asp-action="Index" asp-route-page="@pg" asp-route-pageSize="@pager.PageSize">
+                                <a class="page-link" 
+                                asp-action="Index" 
+                                asp-route-page="@pg" 
+                                asp-route-pageSize="@pager.PageSize"
+                                asp-route-sortBy="@pager.SortingParameter"
+                                asp-route-isDescending="@pager.IsDescending">
                                     @pg
                                 </a>
                             </li>
@@ -129,13 +163,23 @@
                         @if(pager.CurrentPage < pager.EndPage)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-action="Index" asp-route-page="@(pager.CurrentPage + 1)" asp-route-pageSize="@pager.PageSize">
+                                <a class="page-link" 
+                                asp-action="Index" 
+                                asp-route-page="@(pager.CurrentPage + 1)" 
+                                asp-route-pageSize="@pager.PageSize"
+                                asp-route-sortBy="@pager.SortingParameter"
+                                asp-route-isDescending="@pager.IsDescending">
                                     Next
                                 </a>
                             </li>
 
                             <li class="page-item">
-                                <a class="page-link" asp-action="Index" asp-route-page="@pager.TotalPages" asp-route-pageSize="@pager.PageSize">
+                                <a class="page-link" 
+                                asp-action="Index" 
+                                asp-route-page="@pager.TotalPages" 
+                                asp-route-pageSize="@pager.PageSize"
+                                asp-route-sortBy="@pager.SortingParameter"
+                                asp-route-isDescending="@pager.IsDescending">
                                     Last
                                 </a>
                             </li>
@@ -145,8 +189,6 @@
         </div>
     </div>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

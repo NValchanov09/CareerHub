@@ -51,6 +51,11 @@
     padding: 1rem;
 }
 
+.table th a {
+    color: inherit;
+    text-decoration: none;
+}
+
 .table td {
     padding: 1rem;
     vertical-align: middle;
