@@ -5,9 +5,12 @@
 
     Pager pager = new Pager();
 
+    int page = 1;
+
     if(ViewBag.Pager != null)
     {
         pager = ViewBag.Pager;
+        page = pager.CurrentPage;
     }
 
     LanguagesSearchViewModel viewModel = new LanguagesSearchViewModel();
@@ -55,7 +58,17 @@
                 <h2>Languages Management</h2>
 
                 <div class="d-flex">
-                    <a id="deleteSelected" data-delete-url="@Url.Action("DeleteSelected", "Languages")" class="btn btn-danger-custom me-4">
+
+                    <a class="btn btn-secondary-custom me-3"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#searchContainer"
+                            aria-expanded="false"
+                            aria-controls="searchContainer">
+                        <i class="fa fa-search"></i> 
+                        <span class="d-none d-md-inline ms-2">Search</span>
+                    </a>
+
+                    <a id="deleteSelected" data-delete-url="@Url.Action("DeleteSelected", "Languages")" class="btn btn-danger-custom me-3">
                         <i class="fa-solid fa-xmark"></i>
                         <span class="d-none d-md-inline ms-2">Delete Selected</span>
                     </a>
@@ -69,30 +82,31 @@
             </div>
 
             <!-- Search -->
-            <form id="searchForm" 
-                  asp-action="Index" 
-                  asp-route-page="1"
-                  asp-route-pageSize="@pager.PageSize"
-                  asp-route-sortBy="@pager.SortingParameter"
-                  asp-route-isDescending="@pager.IsDescending"
-                  method="get" 
-                  class="me-3 mt-3 mb-2 d-flex justify-content-end">
-                <div class="input-group" style="max-width: 400px;">
-                    <input type="text" name="name" class="form-control" value="@viewModel.Name" placeholder="Search by name..." />
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
-                <a asp-action="Index"
-                   asp-route-page="@pager.CurrentPage"
-                   asp-route-pageSize="10"
-                   asp-route-sortBy="@pager.SortingParameter"
-                   asp-route-isDescending="@pager.IsDescending"
-                   asp-route-name=""
-                class="btn d-flex align-items-center @(viewModel.CancelSearch ? "" : "d-none")" title="Clear search">
-                    <i class="fa fa-xmark text-danger" style="font-size: 2rem;"></i>
-                </a>
-            </form>
+            <div id="searchContainer" class="@(viewModel.CancelSearch ? "" : "collapse")" show)">
+                <form id="searchForm" 
+                      asp-action="Index" 
+                      asp-route-page="1"
+                      asp-route-pageSize="@pager.PageSize"
+                      asp-route-sortBy="@pager.SortingParameter"
+                      asp-route-isDescending="@pager.IsDescending"
+                      class="me-3 mt-3 mb-3 d-flex justify-content-end">
+                    <div class="input-group" style="max-width: 300px;">
+                        <input type="text" name="name" class="form-control" value="@viewModel.Name" placeholder="Search by name..." />
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                    <a asp-action="Index"
+                       asp-route-page="1"
+                       asp-route-pageSize="@pager.PageSize"
+                       asp-route-sortBy="@pager.SortingParameter"
+                       asp-route-isDescending="@pager.IsDescending"
+                       asp-route-name=""
+                       class="btn d-flex align-items-center @(viewModel.CancelSearch ? "" : "d-none")" title="Clear search">
+                        <i class="fa fa-xmark text-danger" style="font-size: 2rem;"></i>
+                    </a>
+                </form>
+            </div>
 
             <!-- Table -->
             <div class="table-responsive">
@@ -140,7 +154,7 @@
                                         Items per page
                                     </label>
 
-                                    <form method="get"
+                                    <form
                                           asp-action="Index"
                                           asp-route-page="1"
                                           asp-route-sortBy="@pager.SortingParameter"
