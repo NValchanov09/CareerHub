@@ -23,15 +23,20 @@ namespace CareerHub.Controllers
         }
 
         // GET: Languages
-        public IActionResult Index(int page = 1, int pageSize = 10, string sortBy = "id", bool isDescending = false)
+        public IActionResult Index(int page = 1, int pageSize = 10, string sortBy = "id", bool isDescending = false, string name = "")
         {
             var languages = _context.Language.AsQueryable();
 
-            List<int> pageSizes = new List<int>{ 5, 10, 15, 25, 50, 100 };
+            if (!string.IsNullOrEmpty(name))
+            {
+                languages = languages.Where(l => l.Name.Contains(name));
+            }
 
             int itemCount = languages.Count();
 
             var pageSizeOptions = new List<SelectListItem>();
+
+            List<int> pageSizes = new List<int> { 5, 10, 15, 25, 50, 100 };
 
             foreach (int size in pageSizes)
             {
@@ -71,9 +76,12 @@ namespace CareerHub.Controllers
 
             Pager pager = new Pager(itemCount, page, pageSize, startItemsShowing, endItemsShowing, pageSizeOptions, sortBy, isDescending);
 
-            var data = languages.Skip(skip).Take(pager.PageSize).ToList();
+            LanguagesSearchViewModel viewModel = new LanguagesSearchViewModel(name);
 
             this.ViewBag.Pager = pager;
+            this.ViewBag.LanguagesSearchViewModel = viewModel;
+
+            var data = languages.Skip(skip).Take(pager.PageSize).ToList();
 
             return View(data);
         }

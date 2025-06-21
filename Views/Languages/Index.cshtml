@@ -5,12 +5,16 @@
 
     Pager pager = new Pager();
 
-    int page = 1;
-
     if(ViewBag.Pager != null)
     {
-        pager = ViewBag.pager;
-        page = pager.CurrentPage;
+        pager = ViewBag.Pager;
+    }
+
+    LanguagesSearchViewModel viewModel = new LanguagesSearchViewModel();
+
+    if(ViewBag.LanguagesSearchViewModel != null)
+    {
+        viewModel = ViewBag.LanguagesSearchViewModel;
     }
 }
 
@@ -64,6 +68,32 @@
                 
             </div>
 
+            <!-- Search -->
+            <form id="searchForm" 
+                  asp-action="Index" 
+                  asp-route-page="1"
+                  asp-route-pageSize="@pager.PageSize"
+                  asp-route-sortBy="@pager.SortingParameter"
+                  asp-route-isDescending="@pager.IsDescending"
+                  method="get" 
+                  class="me-3 mt-3 mb-2 d-flex justify-content-end">
+                <div class="input-group" style="max-width: 400px;">
+                    <input type="text" name="name" class="form-control" value="@viewModel.Name" placeholder="Search by name..." />
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <a asp-action="Index"
+                   asp-route-page="@pager.CurrentPage"
+                   asp-route-pageSize="10"
+                   asp-route-sortBy="@pager.SortingParameter"
+                   asp-route-isDescending="@pager.IsDescending"
+                   asp-route-name=""
+                class="btn d-flex align-items-center @(viewModel.CancelSearch ? "" : "d-none")" title="Clear search">
+                    <i class="fa fa-xmark text-danger" style="font-size: 2rem;"></i>
+                </a>
+            </form>
+
             <!-- Table -->
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
@@ -80,7 +110,8 @@
                                    asp-route-page="@pager.CurrentPage"
                                    asp-route-pageSize="@pager.PageSize"
                                    asp-route-sortBy="id"
-                                   asp-route-isDescending="@(pager.SortingParameter == "id" ? !pager.IsDescending : false)">
+                                   asp-route-isDescending="@(pager.SortingParameter == "id" ? !pager.IsDescending : false)"
+                                   asp-route-name="@viewModel.Name">
                                     Id
                                 </a>
 
@@ -92,7 +123,8 @@
                                    asp-route-page="@pager.CurrentPage"
                                    asp-route-pageSize="@pager.PageSize"
                                    asp-route-sortBy="name"
-                                   asp-route-isDescending="@(pager.SortingParameter == "name" ? !pager.IsDescending : false)">
+                                   asp-route-isDescending="@(pager.SortingParameter == "name" ? !pager.IsDescending : false)"
+                                   asp-route-name="@viewModel.Name">
                                     Name
                                 </a>
 
@@ -112,7 +144,8 @@
                                           asp-action="Index"
                                           asp-route-page="1"
                                           asp-route-sortBy="@pager.SortingParameter"
-                                          asp-route-isDescending="@pager.IsDescending">
+                                          asp-route-isDescending="@pager.IsDescending"
+                                          asp-route-name="@viewModel.Name">
                                         <select name="pageSize" id="pageSizeSelector" class="form-control form-select-sm text-end" style="width: auto;" onchange="this.form.submit()">
 
                                             @foreach (var item in pager.PageSizeOptions)
@@ -189,7 +222,8 @@
                                    asp-route-page="1"
                                    asp-route-pageSize="@pager.PageSize"
                                    asp-route-sortBy="@pager.SortingParameter"
-                                   asp-route-isDescending="@pager.IsDescending">
+                                   asp-route-isDescending="@pager.IsDescending"
+                                   asp-route-name="@viewModel.Name">
                                     First
                                 </a>
                             </li>
@@ -200,7 +234,8 @@
                                    asp-route-page="@pager.CurrentPage - 1"
                                    asp-route-pageSize="@pager.PageSize"
                                    asp-route-sortBy="@pager.SortingParameter"
-                                   asp-route-isDescending="@pager.IsDescending">
+                                   asp-route-isDescending="@pager.IsDescending"
+                                   asp-route-name="@viewModel.Name">
                                     Previous
                                 </a>
                             </li>
@@ -214,7 +249,8 @@
                                    asp-route-page="@pg"
                                    asp-route-pageSize="@pager.PageSize"
                                    asp-route-sortBy="@pager.SortingParameter"
-                                   asp-route-isDescending="@pager.IsDescending">
+                                   asp-route-isDescending="@pager.IsDescending"
+                                   asp-route-name="@viewModel.Name">
                                     @pg
                                 </a>
                             </li>
@@ -228,7 +264,8 @@
                                    asp-route-page="@(pager.CurrentPage + 1)"
                                    asp-route-pageSize="@pager.PageSize"
                                    asp-route-sortBy="@pager.SortingParameter"
-                                   asp-route-isDescending="@pager.IsDescending">
+                                   asp-route-isDescending="@pager.IsDescending"
+                                   asp-route-name="@viewModel.Name">
                                     Next
                                 </a>
                             </li>
@@ -239,7 +276,8 @@
                                    asp-route-page="@pager.TotalPages"
                                    asp-route-pageSize="@pager.PageSize"
                                    asp-route-sortBy="@pager.SortingParameter"
-                                   asp-route-isDescending="@pager.IsDescending">
+                                   asp-route-isDescending="@pager.IsDescending"
+                                   asp-route-name="@viewModel.Name">
                                     Last
                                 </a>
                             </li>
