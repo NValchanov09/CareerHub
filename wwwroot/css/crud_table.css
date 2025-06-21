@@ -305,3 +305,19 @@
 #searchContainer.collapsing {
     transition: all 0.4s ease;
 }
+
+.btn-warning-custom {
+    background: #c9858c;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    color: #912933;
+}
+
+.btn-warning-custom:hover {
+    background: #c9858c;
+    color: #912933;
+}

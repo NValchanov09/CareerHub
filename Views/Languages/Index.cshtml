@@ -22,7 +22,6 @@
 }
 
 <head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="~/css/crud_table.css" rel="stylesheet" asp-append-version="true">
 </head>
 
@@ -64,7 +63,7 @@
                             data-bs-target="#searchContainer"
                             aria-expanded="false"
                             aria-controls="searchContainer">
-                        <i class="fa fa-search"></i> 
+                        <i class="fa fa-filter"></i> 
                         <span class="d-none d-md-inline ms-2">Search</span>
                     </a>
 
@@ -102,8 +101,9 @@
                        asp-route-sortBy="@pager.SortingParameter"
                        asp-route-isDescending="@pager.IsDescending"
                        asp-route-name=""
-                       class="btn d-flex align-items-center @(viewModel.CancelSearch ? "" : "d-none")" title="Clear search">
-                        <i class="fa fa-xmark text-danger" style="font-size: 2rem;"></i>
+                       class="btn @(viewModel.CancelSearch ? "" : "d-none") btn-warning-custom ms-3">
+                        <i class="fa fa-trash"></i>
+                        <span class="d-none d-md-inline ms-2">Clear Filter</span>
                     </a>
                 </form>
             </div>
