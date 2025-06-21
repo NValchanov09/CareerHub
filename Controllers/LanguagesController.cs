@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CareerHub.Data;
 using CareerHub.Models;
 using Microsoft.AspNetCore.Hosting;
+using System.Diagnostics;
 
 namespace CareerHub.Controllers
 {
@@ -159,7 +160,7 @@ namespace CareerHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Language language, IFormFile logoFile)
+        public async Task<IActionResult> Edit(int id, Language language, IFormFile? logoFile)
         {
             if (id != language.Id)
             {
@@ -170,6 +171,8 @@ namespace CareerHub.Controllers
             {
                 try
                 {
+                    string oldLogoPath = await _context.Language.AsNoTracking().Where(l => l.Id == id).Select(l => l.LogoPath).FirstOrDefaultAsync();
+
                     if (logoFile != null && logoFile.Length > 0)
                     {
                         var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
@@ -184,6 +187,31 @@ namespace CareerHub.Controllers
                         }
 
                         language.LogoPath = "/images/" + uniqueFileName;
+
+                        if (!string.IsNullOrEmpty(oldLogoPath))
+                        {   
+                            string oldPath = Path.Combine(_webHostEnvironment.WebRootPath, oldLogoPath.TrimStart('/'));
+                            Debug.WriteLine($"Old path = {oldPath}");
+                            if (System.IO.File.Exists(oldPath))
+                            {
+                                try
+                                {
+                                    System.IO.File.Delete(oldPath);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Debug.WriteLine($"Failed to delete old image: {ex.Message}");
+                                }
+                            }
+                            else
+                            {
+                                Debug.WriteLine($"Old image not found at: {oldPath}");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        language.LogoPath = oldLogoPath;
                     }
 
                     _context.Update(language);
