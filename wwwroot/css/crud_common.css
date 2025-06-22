@@ -64,6 +64,22 @@
         color: white;
     }
 
+.btn-secondary-custom {
+    background: #6c757d;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+    .btn-secondary-custom:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        color: white;
+    }
+
 .action-buttons {
     display: flex;
     gap: 1rem;

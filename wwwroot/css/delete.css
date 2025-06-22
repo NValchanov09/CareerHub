@@ -1,0 +1,45 @@
+﻿.delete-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.delete-warning .warning-icon {
+    color: #856404;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.delete-warning h4 {
+    color: #856404;
+    font-weight: 600;
+}
+
+.delete-warning p {
+    color: #856404;
+    margin-bottom: 0;
+}
+
+.details-row {
+    display: flex;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+    .details-row:last-child {
+        border-bottom: none;
+    }
+
+.details-label {
+    font-weight: 600;
+    color: #495057;
+    width: 150px;
+    flex-shrink: 0;
+}
+
+.details-value {
+    color: #6c757d;
+    flex: 1;
+}
