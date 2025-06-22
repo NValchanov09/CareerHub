@@ -4,30 +4,60 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<head>
+    <link href="~/css/crud_common.css" rel="stylesheet" asp-append-version="true">
+    <link href="~/css/details.css" rel="stylesheet" asp-append-version="true">
+</head>
 
-<div>
-    <h4>Language</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            Logo
-        </dt>
-        <dd class = "col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.LogoPath))
-            {
-                <img src="@Model.LogoPath" alt="@Model.Name Logo" width="100" />
-            }
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<body>
+
+    <div class="page-container">
+        <div class="page-header">
+            <h2>
+                <i class="fas fa-eye"></i>
+                Details
+            </h2>
+        </div>
+
+        <div class="page-content">
+            <a asp-action="Index" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Back to Languages List
+            </a>
+
+            <div class="details-container">
+                <div class="details-row">
+                    <div class="details-label">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </div>
+                    <div class="details-value">
+                        @Html.DisplayFor(model => model.Name)
+                    </div>
+                </div>
+
+                <div class="details-row">
+                    <div class="details-label">
+                        Logo
+                    </div>
+                    <div class="details-value">
+                        @if (!string.IsNullOrEmpty(Model.LogoPath))
+                        {
+                            <img src="@Model.LogoPath" alt="@Model.Name Logo" width="100" />
+                        }   
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary-custom">
+                    <i class="fas fa-save me-2"></i>
+                    <span>Edit</span>
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger-custom">
+                    <i class="fas fa-times me-2"></i>
+                    <span>Delete</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>

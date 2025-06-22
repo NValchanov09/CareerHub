@@ -1,0 +1,21 @@
+﻿.details-row {
+    display: flex;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+    .details-row:last-child {
+        border-bottom: none;
+    }
+
+.details-label {
+    font-weight: 600;
+    color: #495057;
+    width: 150px;
+    flex-shrink: 0;
+}
+
+.details-value {
+    color: #6c757d;
+    flex: 1;
+}
