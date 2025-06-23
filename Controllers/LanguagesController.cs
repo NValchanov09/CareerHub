@@ -131,7 +131,7 @@ namespace CareerHub.Controllers
                     await logoFile.CopyToAsync(stream);
                 }
 
-                language.LogoPath = "/images/languages" + uniqueFileName;
+                language.LogoPath = "/images/languages/" + uniqueFileName;
             }
 
             _context.Add(language);
@@ -186,7 +186,7 @@ namespace CareerHub.Controllers
                             await logoFile.CopyToAsync(stream);
                         }
 
-                        language.LogoPath = "/images/languages" + uniqueFileName;
+                        language.LogoPath = "/images/languages/" + uniqueFileName;
 
                         DeleteImage(oldLogoPath);
                     }
