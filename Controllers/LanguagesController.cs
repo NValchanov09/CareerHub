@@ -188,26 +188,7 @@ namespace CareerHub.Controllers
 
                         language.LogoPath = "/images/" + uniqueFileName;
 
-                        if (!string.IsNullOrEmpty(oldLogoPath))
-                        {   
-                            string oldPath = Path.Combine(_webHostEnvironment.WebRootPath, oldLogoPath.TrimStart('/'));
-                            Debug.WriteLine($"Old path = {oldPath}");
-                            if (System.IO.File.Exists(oldPath))
-                            {
-                                try
-                                {
-                                    System.IO.File.Delete(oldPath);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Debug.WriteLine($"Failed to delete old image: {ex.Message}");
-                                }
-                            }
-                            else
-                            {
-                                Debug.WriteLine($"Old image not found at: {oldPath}");
-                            }
-                        }
+                        DeleteImage(oldLogoPath);
                     }
                     else
                     {
@@ -259,6 +240,7 @@ namespace CareerHub.Controllers
             var language = await _context.Language.FindAsync(id);
             if (language != null)
             {
+                DeleteImage(language.LogoPath);
                 _context.Language.Remove(language);
             }
 
@@ -296,6 +278,29 @@ namespace CareerHub.Controllers
         private bool LanguageExists(int id)
         {
             return _context.Language.Any(e => e.Id == id);
+        }
+
+        private void DeleteImage(string? imagePath)
+        {
+            if (!string.IsNullOrEmpty(imagePath))
+            {
+                string path = Path.Combine(_webHostEnvironment.WebRootPath, imagePath.TrimStart('/'));
+                if (System.IO.File.Exists(path))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(path);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Failed to delete image: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine($"Image not found at: {path}");
+                }
+            }
         }
     }
 }
