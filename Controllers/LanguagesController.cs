@@ -120,7 +120,7 @@ namespace CareerHub.Controllers
         {
             if (logoFile != null && logoFile.Length > 0)
             {
-                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/languages");
                 Directory.CreateDirectory(uploadsFolder);
 
                 var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(logoFile.FileName);
@@ -131,7 +131,7 @@ namespace CareerHub.Controllers
                     await logoFile.CopyToAsync(stream);
                 }
 
-                language.LogoPath = "/images/" + uniqueFileName;
+                language.LogoPath = "/images/languages" + uniqueFileName;
             }
 
             _context.Add(language);
@@ -175,7 +175,7 @@ namespace CareerHub.Controllers
 
                     if (logoFile != null && logoFile.Length > 0)
                     {
-                        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/languages");
                         Directory.CreateDirectory(uploadsFolder);
 
                         var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(logoFile.FileName);
@@ -186,7 +186,7 @@ namespace CareerHub.Controllers
                             await logoFile.CopyToAsync(stream);
                         }
 
-                        language.LogoPath = "/images/" + uniqueFileName;
+                        language.LogoPath = "/images/languages" + uniqueFileName;
 
                         DeleteImage(oldLogoPath);
                     }
@@ -263,8 +263,14 @@ namespace CareerHub.Controllers
 
             try
             {
-                var companiesToDelete = _context.Language.Where(c => languageIds.Contains(c.Id)).ToList();
-                _context.Language.RemoveRange(companiesToDelete);
+                var languagesToDelete = _context.Language.Where(c => languageIds.Contains(c.Id)).ToList();
+
+                foreach(var language in languagesToDelete)
+                {
+                    DeleteImage(language.LogoPath);
+                }
+
+                _context.Language.RemoveRange(languagesToDelete);
                 _context.SaveChanges();
 
                 return Json(new { success = true });
